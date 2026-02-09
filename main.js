@@ -1,20 +1,9 @@
-/*
-Add todo
-    handle form submit 
-    a) form data dhore ekta new todo object banate hobe
-    b) todo item take todo list a push korbo
-    c) todoList local storage a save korte hobe
-    d) todoList render korte hobe
-  
-    edit todolist 
-    a) edit btn er moddhe event listener add kobo(click event)
-    b) editing todo ta todoList theke ber kore nibo
-    c) todo data diye form update korobo
-    d) update functionalities 
-    e) editing todo ta update korte hobe form data diye
-    f) localstorage update korte hobe
-    g) todoList abr render korte hobe
-
+/*  
+  Programming principles
+  DRY = Don't Repeat Yourself
+  KISS = Keep It Simple Stupid
+  SOLID
+  S = Single Responsibilites
 */
 
 
@@ -25,8 +14,6 @@ const todoForm = document.querySelector('#todoForm');
 
 const todoListElement = document.querySelector('#todoList');
 const completedListElement = document.querySelector('#completedList');
-
-
 
 todoForm.addEventListener('submit', function (e) {
   e.preventDefault();
@@ -65,62 +52,26 @@ todoForm.addEventListener('submit', function (e) {
   displayTodo();
 });
 
+function displayCompleted() {
+  const todos = todoList.filter((todo) => todo.completed)
+  display(todos, completedListElement);
+}
 
 function displayTodo() {
-  let list = `<ul class="list-group">
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <h5>To-Do</h5> 
-                    <h5>Priority</h5>
-                    <h5>Action</h5>
-                </li>`;
-  todoList.forEach(function (todo) {
-    if (!todo.completed) {
-      list += `<li class="list-group-item d-flex justify-content-between align-items-center">
-                    <h6>${todo.title}</h6>
-                    <h6>${todo.priority}</h6>
-                    <div class="d-flex flex-wrap gap-2">
-                        <button class="btn btn-success completeBtn" data-id="${todo.id}">Done</button>
-                        <button class="btn btn-primary editBtn" data-id="${todo.id}">Edit</button>
-                        <button class="btn btn-danger deleteBtn" data-id="${todo.id}">Delete</button>
-                    </div>
-                </li>`
-    }
-  });
-
-  list += '</ul>';
-
-  todoListElement.innerHTML = list;
-
+  const todos = todoList.filter((todo) => !todo.completed)
+  display(todos, todoListElement);
 }
 
-function displayCompleted() {
-  let list = `<ul class="list-group">
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <h5>To-Do</h5> 
-                    <h5>Priority</h5>
-                    <h5>Action</h5>
-                </li>`;
-  todoList.forEach(function (todo) {
-    if (todo.completed) {
-      list += `<li class="list-group-item d-flex justify-content-between align-items-center">
-                    <h6>${todo.title}</h6>
-                    <h6>${todo.priority}</h6>
-                    <div class="d-flex flex-wrap gap-2">
-                        <button class="btn btn-success incompleteBtn" data-id="${todo.id}">Undone</button>
-                        <button class="btn btn-danger deleteBtn" data-id="${todo.id}">Delete</button>
-                    </div>
-                </li>`
-    }
+function display(todos, element) {
+  let list = '';
+  todos.forEach(function (todo) {
+    list += todoListItemComponent(todo)
   });
-
-  list += '</ul>';
-
-  completedListElement.innerHTML = list;
+  element.innerHTML = todoListComponent(list);
 }
 
-
-todoListElement.addEventListener('click', function (e) {
-  let dataId = Number(e.target.dataset.id); // ekhane Number() function use kora hoyeche id take number bananor jonno
+function handleButtonClicks(e) {
+  let dataId = Number(e.target.dataset.id);
   if (e.target.classList.contains('editBtn')) {
     editingTodo = todoList.find((todo) => todo.id === dataId);
     todoForm.title.value = editingTodo.title;
@@ -136,19 +87,21 @@ todoListElement.addEventListener('click', function (e) {
       displayTodo();
     }
   }
-  if (e.target.classList.contains('completeBtn')) {
+  if (e.target.classList.contains('doneBtn')) {
     let todo = todoList.find((todo) => todo.id === dataId);
     todo.completed = true;
     localStorage.setItem('todoList', JSON.stringify(todoList));
     displayTodo();
     displayCompleted();
   }
-});
+}
+
+todoListElement.addEventListener('click', () => handleButtonClicks(e));
 
 completedListElement.addEventListener('click', function (e) {
   let dataId = Number(e.target.dataset.id);
 
-  if (e.target.classList.contains('incompleteBtn')) {
+  if (e.target.classList.contains('undoneBtn')) {
     console.log('incomplete');
 
     let todo = todoList.find((todo) => todo.id === dataId);
