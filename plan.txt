@@ -1,0 +1,116 @@
+Problem: Writing manual todo list everyday's works
+Solution: Digital todo application
+
+Planning & Requirement Analysis: 
+    1. Add todo 
+        - Title
+        - Priority
+        - others
+    2. Edit/Update todo
+    3. Delete todo 
+    4. Complete todo
+
+    5. Todo List 
+    6. Completed List
+    7. Filter
+    8. Sort 
+    9. Search
+
+System Design:
+    1. Data structure: todo: object, todo list array 
+        ==========data structure for todo===============
+        {
+            id: 6546545
+            title: "Task one",
+            priority: "high"
+            completed: false
+            created_at: 2012-12-01 15:30:10
+            update_at: 2012-12-01 15:30:10
+        }
+
+        ========== data structure for todo list ===============
+        [
+            {
+                id: 6546545
+                title: "Task one",
+                priority: "high"
+                completed: false
+                created_at: 2012-12-01 15:30:10
+                update_at: 2012-12-01 15:30:10
+            },
+            {
+                id: 7864564165
+                title: "Task one",
+                priority: "high"
+                completed: false
+                created_at: 2012-12-01 15:30:10
+                update_at: 2012-12-01 15:30:10
+            },
+            {
+                id: 56456465
+                title: "Task one",
+                priority: "high"
+                completed: false
+                created_at: 2012-12-01 15:30:10
+                update_at: 2012-12-01 15:30:10
+            }
+        ]
+
+    2. Data storage: Local storage
+    2. User Interface: Form, Tables to display todos, Tables to display completed tasks 
+
+    Algorithm: 
+    1. Add todo 
+        variables: todoList, 
+        functions: 
+            submitEventListener - to listen the form submit event, 
+            formSubmitHandler - Task to be done after submit the form,
+                - validateFormData: validate form data
+                    - displayErrors: show error if not valid
+                - addTodo - to add todo into the todoList,
+                - updateLocalStorage: Store the updated todoList into the local storage
+
+        Steps: 
+            1. Start
+            2. Read user input: title, priority
+            3. Validate user input
+                - if not valid show error
+            3. Make todo object
+            4. push the todo object into the todoList array
+            5. store the updated todoList into the updateLocalStorage
+            6. display the updated todoList 
+         
+    2. Display todo
+        variables: todoList,
+        functions: displayTodo - Show the todos from the todoList in table format
+    3. Update todo
+        variables: todoList, todo
+        functions: 
+            editButtonClickListener - Listen the click event on edit button
+            handleTheButtonClick - Task to do after button click 
+                - findTodo: find the todo to be edited
+                - updateForm: update form data by the editing todo found 
+            handleFormSubmit
+            updateTodo - update the editing todo by form data
+            updateLocalStorage
+            displayTodo
+    4. Delete Todo
+        variables: todoList, todo
+        functions: 
+        deleteButtonClickListener - Listen the click event on delete button
+        handleTheButtonClick: 
+            - findTodo: find the todo to be deleted from the todoList.
+            - deleteTodo: delete the todo from the todoLIst permanently
+            - updateLocalStorage
+            - displayTodo
+    5. Complete todo
+        variables: todoList, todo
+        functions: 
+        completeButtonClickListener - Listen the click event on complete button
+        handleTheButtonClick: 
+            - findTodo: find the todo to be completed from the todoList.
+            - completeTodo: update the complete status from false to true
+            - updateLocalStorage
+            - displayTodo
+            - displayCompletedList
+    
