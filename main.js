@@ -8,7 +8,8 @@ const completedListElement = document.querySelector('#completedList');
 
 init();
 
-todoForm.addEventListener('submit', function (e) {
+
+const handleFormSubmit = function (e) {
   e.preventDefault();
   clearErrors();
 
@@ -27,7 +28,9 @@ todoForm.addEventListener('submit', function (e) {
   formReset();
   updateStorageAndDisplayTodo();
   displaySuccessMessage();
-});
+}
+
+todoForm.addEventListener('submit', handleFormSubmit);
 
 /**
  * Adds a new todo to the list.
@@ -175,7 +178,6 @@ function findIndexOfTodoById(id) {
  */
 function updateFormData(todoId) {
   editingTodo = findTodoById(todoId);
-
   todoForm.title.value = editingTodo.title;
   todoForm.priority.value = editingTodo.priority;
 }
@@ -194,9 +196,8 @@ function deleteTodo(id) {
   if (index > -1) {
     todoList.splice(index, 1);
     updateStorageAndDisplayTodo();
+    successMessage = 'Todo deleted successfully';
   }
-
-  successMessage = 'Todo deleted successfully';
 }
 
 /**
@@ -226,16 +227,26 @@ function getAction(key) {
  * If the action type is not 'edit', it displays a success message.
  */
 function handleButtonClicks(e) {
+  e.stopPropagation();
   const actionType = e.target.dataset.action;
+  
   if (!actionType) {
     return;
   }
-  let todoId = Number(e.target.dataset.id);
+
   const action = getAction(actionType);
+
+  let todoId = Number(e.target.dataset.id);
   action(todoId);
+  
   if (actionType !== 'edit') {
     displaySuccessMessage();
   }
+
+  if(actionType === 'done' || actionType === 'undone') {
+    displayCompleted();
+  }
+
 }
 
 /**
